@@ -18,6 +18,13 @@ pipeline {
                 echo 'Testing..'
             }
         }
+
+        stage('Test Python') {
+            steps {
+                sh 'python3 hello.py'
+            }
+        }
+        
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
