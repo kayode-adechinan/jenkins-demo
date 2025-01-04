@@ -1,5 +1,5 @@
 pipeline {
-    agent any  // Use any available agent
+    agent any
 
     stages {
         stage('Checkout') {
@@ -9,21 +9,28 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Install Python') {
             steps {
-                echo 'Building...'
+                script {
+                    // Check if Python is already installed
+                    def pythonInstalled = sh(script: 'command -v python3 || echo "not found"', returnStdout: true).trim()
+                    if (pythonInstalled == "not found") {
+                        // Install Python if not found
+                        sh '''
+                        echo "Python not found. Installing..."
+                        apt-get update && apt-get install -y python3 python3-pip
+                        '''
+                    } else {
+                        echo "Python is already installed: ${pythonInstalled}"
+                    }
+                }
             }
         }
 
-        stage('Test') {
+        stage('Run Script') {
             steps {
-                sh 'node hello.js'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deployment step (if needed)...'
+                // Execute the Python script
+                sh 'python3 hello.py'
             }
         }
     }
