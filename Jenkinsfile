@@ -8,19 +8,19 @@ pipeline {
                 checkout scm
             }
         }
-
-        stage('Install Python') {
+        stage('Build') {
             steps {
-                 steps {
-                    echo 'TEST'
-                }
+                echo 'Building..'
             }
         }
-
-        stage('Run Script') {
+        stage('Test') {
             steps {
-                // Execute the Python script
-                sh 'python3 hello.py'
+                echo 'Testing..'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
             }
         }
     }
